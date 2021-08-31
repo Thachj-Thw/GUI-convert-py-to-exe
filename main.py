@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
@@ -150,8 +151,6 @@ class WinAddData:
             WinTutorial(self.win_add)
 
     def on_close(self):
-        global add_win
-        add_win = None
         opened.set(False)
         self.win_add.destroy()
 
@@ -237,7 +236,7 @@ def openfile():
         for d in os.listdir(os.path.dirname(root.path)):
             if ".py" not in d:
                 lst_data.append(d)
-        if add_win:
+        if opened.get():
             add_win.update_list_data()
         b_convert["state"] = ACTIVE
         if ".pyw" in os.path.basename(root.path):
