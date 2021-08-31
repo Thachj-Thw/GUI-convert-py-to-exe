@@ -1,5 +1,6 @@
 def path():
-    import sys, os
+    import sys
+    import os
     try:
         return sys._MEIPASS
     except AttributeError:
