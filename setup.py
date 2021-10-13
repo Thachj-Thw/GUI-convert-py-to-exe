@@ -4,7 +4,7 @@ import os
 def check_and_mkdir(dir_name):
     path = os.path.join(os.getcwd(), dir_name)
     if not os.path.isdir(path):
-        os.path.mkdir(path)
+        os.mkdir(path)
 
 
 check_and_mkdir("build")
