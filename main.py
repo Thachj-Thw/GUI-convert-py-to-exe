@@ -256,7 +256,10 @@ def click_convert():
     file_name.set(os.path.basename(path_input.get())[:os.path.basename(path_input.get()).find(".")])
     command = f'pyinstaller --clean --specpath ".\\spec" --distpath "{os.path.normcase(path_output.get())}" '
     if path_icon.get():
-        command += f'--icon="{os.path.normcase(path_icon.get())}" '
+        if path_icon.get() == "NONE":
+            command += '--icon="NONE" '
+        else:
+            command += f'--icon="{os.path.normcase(path_icon.get())}" '
     for data in lst_add:
         path_add = f"{os.path.dirname(path_input.get())}\\{data}"
         if "." in data:
@@ -276,6 +279,7 @@ def click_convert():
 
 
 def convert(command):
+    print(command)
     proc = subprocess.Popen(command, stderr=subprocess.PIPE)
     info_err = ""
     for line in proc.stderr:
