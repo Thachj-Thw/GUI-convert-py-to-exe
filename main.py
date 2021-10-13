@@ -5,6 +5,7 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 from resource_path import resource_path
 import os
+import re
 import _thread
 import shutil
 import subprocess
@@ -253,7 +254,7 @@ def change_output():
 
 
 def click_convert():
-    file_name.set(os.path.basename(path_input.get())[:os.path.basename(path_input.get()).find(".")])
+    file_name.set(re.search(".*(?=[.])", os.path.basename(path_input.get())).group())
     command = f'pyinstaller --clean --specpath ".\\spec" --distpath "{os.path.normcase(path_output.get())}" '
     if path_icon.get():
         if path_icon.get() == "NONE":
@@ -261,8 +262,8 @@ def click_convert():
         else:
             command += f'--icon="{os.path.normcase(path_icon.get())}" '
     for data in lst_add:
-        path_add = f"{os.path.dirname(path_input.get())}\\{data}"
-        if "." in data:
+        path_add = os.path.join(os.path.dirname(path_input.get()), data)
+        if os.path.isfile(data):
             command += f'--add-data="{os.path.normcase(path_add)};." '
         else:
             command += f'--add-data="{os.path.normcase(path_add)};{data}" '
