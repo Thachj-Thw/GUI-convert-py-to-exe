@@ -16,15 +16,15 @@ path = os.path.normcase(resource_path.path())
 # Init
 root = Tk()
 root.title("Convert py to exe")
-root_icon = f"{path}\\icon\\pyinstaller.ico"
+root_icon = os.path.join(path, "icon", "pyinstaller.ico")
 root.iconbitmap(root_icon)
 root.geometry("345x450")
 root.minsize(345, 450)
 root.maxsize(345, 450)
 
 # import image
-icon_windowed = ImageTk.PhotoImage(Image.open(f"{path}\\icon\\windowed.ico").resize((32, 32)))
-icon_console = ImageTk.PhotoImage(Image.open(f"{path}\\icon\\console.ico").resize((32, 32)))
+icon_windowed = ImageTk.PhotoImage(Image.open(os.path.join(path, "icon", "windowed.ico")).resize((32, 32)))
+icon_console = ImageTk.PhotoImage(Image.open(os.path.join(path, "icon", "console.ico")).resize((32, 32)))
 
 # Global variable
 file_name = StringVar()
