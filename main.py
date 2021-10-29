@@ -118,6 +118,7 @@ class MainFrame(tk.Frame):
         self.path_in = ""
         self.path_out = ""
         self.path_icon = ""
+        self.data = []
 
         self.infile = InFile(self)
         self.out = OutFile(self)
@@ -181,9 +182,11 @@ class MainFrame(tk.Frame):
             messagebox.showwarning(title="Convert py to exe", message=mess)
             return
         self.name_file = self.infile.get_name()
-        self.path_in = self.infile.get_path()
-        self.path_out = self.out.get_path()
-        self.path_icon = self.option.get_path()
+        self.path_in = os.path.normpath(self.infile.get_path())
+        self.path_out = os.path.normpath(self.out.get_path())
+        icon = self.option.get_path()
+        self.path_icon = os.path.normpath(icon) if icon else ""
+        self.data = self.add.get_add()
         self.convert.disable()
         self.convert.set_text("Converting...", color="#191cf7")
         threading.Thread(target=self.run).start()
@@ -209,7 +212,7 @@ class MainFrame(tk.Frame):
             ok = messagebox.askyesno(title="Convert py to exe",
                                      message="Convert Successfully\nDo you want to delete .spec file")
             if ok:
-                os.unlink(os.path.join(os.path.dirname(os.path.normpath(self.path_in)), self.name_file + ".spec"))
+                os.unlink(os.path.join(os.path.dirname(self.path_in), self.name_file + ".spec"))
         shutil.rmtree(os.path.join(path(), "build", self.name_file))
         self.convert.enable()
 
@@ -217,11 +220,10 @@ class MainFrame(tk.Frame):
         command = f'pyinstaller --clean --specpath "{os.path.dirname(self.path_in)}" ' \
                   f'--distpath "{self.path_out}" --workpath "{os.path.join(path(), "build")}" ' \
                   f'--name "{self.name_file}" '
-        icon = self.option.get_path()
-        if icon:
-            command += f'--icon="{icon}" '
-        for data in self.add.get_add():
-            path_data = os.path.dirname(self.infile.get_path()) + "/" + data
+        if self.path_icon:
+            command += f'--icon="{self.path_icon}" '
+        for data in self.data:
+            path_data = os.path.dirname(self.path_in) + "/" + data
             if os.path.isfile(path_data):
                 command += f'--add-data="{path_data};." '
             else:
