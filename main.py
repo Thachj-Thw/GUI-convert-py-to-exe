@@ -141,33 +141,35 @@ class MainFrame(tk.Frame):
         in_path = filedialog.askopenfilename(
             title="Chose a python file", filetypes=(("Python file", ".py .pyw"), ("All file", "*.*")))
         if in_path:
-            self.infile.set_path(in_path)
-            self.out.set_path(os.path.dirname(in_path))
-            tail = os.path.splitext(os.path.basename(in_path))[1]
+            norm_in_path = os.path.normpath(in_path)
+            self.infile.set_path(norm_in_path)
+            self.out.set_path(os.path.dirname(norm_in_path))
+            tail = os.path.splitext(os.path.basename(norm_in_path))[1]
             if tail == ".pyw":
                 self.option.disable_noconsole()
             else:
                 self.option.enable_noconsole()
-            self.add.add_all(os.path.dirname(in_path))
+            self.add.add_all(os.path.dirname(norm_in_path))
 
     def on_change_path(self):
         in_path = self.infile.get_path()
         if os.path.isfile(in_path):
-            self.infile.set_path(in_path)
-            self.out.set_path(os.path.dirname(in_path))
-            tail = os.path.splitext(os.path.basename(in_path))[1]
+            norm_in_path = os.path.normpath(in_path)
+            self.infile.set_path(norm_in_path)
+            self.out.set_path(os.path.dirname(norm_in_path))
+            tail = os.path.splitext(os.path.basename(norm_in_path))[1]
             if tail == ".pyw":
                 self.option.disable_noconsole()
             else:
                 self.option.enable_noconsole()
-            self.add.add_all(os.path.dirname(in_path))
+            self.add.add_all(os.path.dirname(norm_in_path))
         else:
             self.add.remove_all()
 
     def on_change(self):
         out_path = filedialog.askdirectory()
         if out_path:
-            self.out.set_path(out_path)
+            self.out.set_path(os.path.normpath(out_path))
 
     def check_ready(self):
         if not self.infile.get_path():
@@ -182,10 +184,9 @@ class MainFrame(tk.Frame):
             messagebox.showwarning(title="Convert py to exe", message=mess)
             return
         self.name_file = self.infile.get_name()
-        self.path_in = os.path.normpath(self.infile.get_path())
-        self.path_out = os.path.normpath(self.out.get_path())
-        icon = self.option.get_path()
-        self.path_icon = os.path.normpath(icon) if icon else ""
+        self.path_in = self.infile.get_path()
+        self.path_out = self.out.get_path()
+        self.path_icon = self.option.get_path()
         self.data = self.add.get_add()
         self.convert.disable()
         self.convert.set_text("Converting...", color="#191cf7")
@@ -223,7 +224,7 @@ class MainFrame(tk.Frame):
         if self.path_icon:
             command += f'--icon="{self.path_icon}" '
         for data in self.data:
-            path_data = os.path.dirname(self.path_in) + "/" + data
+            path_data = os.path.join(os.path.dirname(self.path_in), data)
             if os.path.isfile(path_data):
                 command += f'--add-data="{path_data};." '
             else:
