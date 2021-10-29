@@ -1,5 +1,4 @@
 import tkinter as tk
-import subprocess
 
 
 class Info(tk.Frame):
