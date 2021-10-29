@@ -51,7 +51,7 @@ class Options(tk.Frame):
         else:
             path = filedialog.askopenfilename(title="Select a icon file", filetypes=(("Icon file", ".ico"),))
             if path:
-                self.path.set(os.path.normpath(path))
+                self.path.set(os.path.normcase(path))
                 img = ImageTk.PhotoImage(Image.open(self.path.get()).resize((32, 32)))
                 self.option_icon.image["image"] = img
                 self.option_icon.image.image = img
@@ -87,14 +87,12 @@ class CheckBoxOptions(tk.LabelFrame):
         frame1 = tk.Frame(self, bg=master["bg"])
         frame2 = tk.Frame(self, bg=master["bg"])
         frame3 = tk.Frame(self, bg=master["bg"])
-
         self.onefile = tk.IntVar(value=1)
         self.noconsole = tk.IntVar(value=1)
         self.admin = tk.IntVar(value=1)
         self.cb_onefile = HoverCheckButton(frame1, text="One file", variable=self.onefile)
         self.cb_noconsole = HoverCheckButton(frame2, text="No console", variable=self.noconsole)
         self.cb_admin = HoverCheckButton(frame3, text="Run as administrator", variable=self.admin)
-
         self.cb_onefile.pack(side=tk.LEFT)
         self.cb_noconsole.pack(side=tk.LEFT)
         self.cb_admin.pack(side=tk.LEFT)
@@ -151,16 +149,12 @@ class Icon(tk.LabelFrame):
                               },
                 "map": {"selectbackground": [("readonly", master["bg"])],
                         "selectforeground": [("readonly", "black")],
-                        "background": [("readonly", master["bg"])]
-                        }
-            }
-        })
+                        "background": [("readonly", master["bg"])]}}})
         s.theme_use("mytheme")
         options = ("Default", "None", "Option")
         self.option = tk.StringVar(value=options[0])
         self.menu = ttk.Combobox(self, textvariable=self.option, values=options, width=10)
         self.menu["state"] = "readonly"
-
         self.image.pack()
         self.menu.pack(side=tk.BOTTOM, padx=5, pady=5)
         self.pack(side=tk.RIGHT, fill=tk.BOTH, padx=5, pady=5)

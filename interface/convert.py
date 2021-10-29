@@ -16,7 +16,6 @@ class Convert(tk.Frame):
         self.button.pack(pady=15)
         self.label.pack()
         self.pack(pady=5, fill=tk.X)
-
         self.button.bind("<Enter>", self.on_enter)
         self.button.bind("<Leave>", self.on_leave)
 

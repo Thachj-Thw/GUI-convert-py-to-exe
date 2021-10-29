@@ -12,7 +12,6 @@ class Converting(tk.Frame):
         style.configure("Suc.Horizontal.TProgressbar", borderwidth=0, troughcolor="#ffffff", background="#43ff36")
         style.configure("Fail.Horizontal.TProgressbar", borderwidth=0, troughcolor="#ffffff", background="#ff3636")
         self.bar = ttk.Progressbar(self, length=466, orient=tk.HORIZONTAL, style="My.Horizontal.TProgressbar")
-
         self.bar.pack()
         self.pack()
 
