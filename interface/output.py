@@ -1,4 +1,5 @@
 import tkinter as tk
+import os
 
 
 class OutFile(tk.Frame):
@@ -21,7 +22,7 @@ class OutFile(tk.Frame):
         self.fout.path.set(path)
 
     def get_path(self):
-        return self.fout.entry.get()
+        return os.path.normcase(self.fout.entry.get())
 
 
 class FrameOut(tk.LabelFrame):

@@ -34,7 +34,7 @@ class InFile(tk.Frame):
             self.fname.name.set(os.path.splitext(os.path.basename(path))[0])
 
     def get_path(self):
-        return self.fpath.entry.get()
+        return os.path.normcase(self.fpath.entry.get())
 
     def get_name(self):
         return self.fname.entry.get()
@@ -47,10 +47,8 @@ class FrameName(tk.Frame):
         label = tk.Label(self, text="Name:", bg=self["bg"], font="Calibri 10")
         self.name = tk.StringVar(value="")
         self.entry = tk.Entry(self, textvariable=self.name, bg="#ffffff", bd=0, font="Calibri 10", width=20)
-
         label.pack(side=tk.LEFT, padx=5)
         self.entry.pack(side=tk.LEFT, padx=5, pady=10)
-
         self.pack(side=tk.TOP, fill=tk.X)
 
 
@@ -64,11 +62,9 @@ class FramePath(tk.LabelFrame):
         self.default = master["bg"]
         self.button = tk.Button(self, text="Select", width=6, activebackground="#4ee5ed", bg=self.default, bd=0,
                                 font="Calibri 10")
-
         label.pack(side=tk.LEFT, padx=5, pady=5)
         self.entry.pack(side=tk.LEFT, pady=5)
         self.button.pack(side=tk.LEFT, padx=5)
-
         self.pack(side=tk.BOTTOM, fill=tk.X)
         self.button.bind("<Enter>", self.on_enter)
         self.button.bind("<Leave>", self.on_leave)

@@ -60,7 +60,6 @@ class SplashFrame(tk.Frame):
         v = subprocess.Popen("pyinstaller --version", **subprocess_args(True))
         outs, _ = v.communicate()
         version = outs.decode()[:-1]
-
         self.getting_version = False
 
     def check_update(self):
@@ -119,7 +118,6 @@ class MainFrame(tk.Frame):
         self.path_out = ""
         self.path_icon = ""
         self.data = []
-
         self.infile = InFile(self)
         self.out = OutFile(self)
         windowed = ImageTk.PhotoImage(Image.open(os.path.join(path(), "add", "icon", "windowed.ico")).resize((32, 32)))
@@ -129,40 +127,38 @@ class MainFrame(tk.Frame):
         self.convert = Convert(self)
         self.info = Info(self, version)
         self.converting = Converting(self)
-
         self.infile.set_command(self.on_select)
         self.infile.set_trace(self.on_change_path)
         self.out.set_command(self.on_change)
         self.convert.set_command(self.on_convert)
-
         self.pack()
 
     def on_select(self):
         in_path = filedialog.askopenfilename(
             title="Chose a python file", filetypes=(("Python file", ".py .pyw"), ("All file", "*.*")))
         if in_path:
-            norm_in_path = os.path.normpath(in_path)
-            self.infile.set_path(norm_in_path)
-            self.out.set_path(os.path.dirname(norm_in_path))
-            tail = os.path.splitext(os.path.basename(norm_in_path))[1]
+            norm = os.path.normpath(in_path)
+            self.infile.set_path(norm)
+            self.out.set_path(os.path.dirname(norm))
+            tail = os.path.splitext(os.path.basename(norm))[1]
             if tail == ".pyw":
                 self.option.disable_noconsole()
             else:
                 self.option.enable_noconsole()
-            self.add.add_all(os.path.dirname(norm_in_path))
+            self.add.add_all(os.path.dirname(norm))
 
     def on_change_path(self):
         in_path = self.infile.get_path()
         if os.path.isfile(in_path):
-            norm_in_path = os.path.normpath(in_path)
-            self.infile.set_path(norm_in_path)
-            self.out.set_path(os.path.dirname(norm_in_path))
-            tail = os.path.splitext(os.path.basename(norm_in_path))[1]
+            norm = os.path.normpath(in_path)
+            self.infile.set_path(norm)
+            self.out.set_path(os.path.dirname(norm))
+            tail = os.path.splitext(os.path.basename(norm))[1]
             if tail == ".pyw":
                 self.option.disable_noconsole()
             else:
                 self.option.enable_noconsole()
-            self.add.add_all(os.path.dirname(norm_in_path))
+            self.add.add_all(os.path.dirname(norm))
         else:
             self.add.remove_all()
 
