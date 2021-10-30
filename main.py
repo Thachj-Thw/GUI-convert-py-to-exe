@@ -127,27 +127,19 @@ class MainFrame(tk.Frame):
         self.convert = Convert(self)
         self.info = Info(self, version)
         self.converting = Converting(self)
-        self.infile.set_command(self.on_select)
-        self.infile.set_trace(self.on_change_path)
-        self.out.set_command(self.on_change)
+        self.infile.set_command(self.on_click)
+        self.infile.set_trace(self.on_change)
         self.convert.set_command(self.on_convert)
         self.pack()
 
-    def on_select(self):
-        in_path = filedialog.askopenfilename(
-            title="Chose a python file", filetypes=(("Python file", ".py .pyw"), ("All file", "*.*")))
+    def on_click(self):
+        in_path = filedialog.askopenfilename(title="Chose a python file",
+                                             filetypes=(("Python file", ".py .pyw"), ("All file", "*.*")))
         if in_path:
-            norm = os.path.normpath(in_path)
-            self.infile.set_path(norm)
-            self.out.set_path(os.path.dirname(norm))
-            tail = os.path.splitext(os.path.basename(norm))[1]
-            if tail == ".pyw":
-                self.option.disable_noconsole()
-            else:
-                self.option.enable_noconsole()
-            self.add.add_all(os.path.dirname(norm))
+            self.infile.set_path(os.path.normpath(in_path))
+        self.on_change()
 
-    def on_change_path(self):
+    def on_change(self):
         in_path = self.infile.get_path()
         if os.path.isfile(in_path):
             norm = os.path.normpath(in_path)
@@ -161,11 +153,6 @@ class MainFrame(tk.Frame):
             self.add.add_all(os.path.dirname(norm))
         else:
             self.add.remove_all()
-
-    def on_change(self):
-        out_path = filedialog.askdirectory()
-        if out_path:
-            self.out.set_path(os.path.normpath(out_path))
 
     def check_ready(self):
         if not self.infile.get_path():
@@ -201,7 +188,7 @@ class MainFrame(tk.Frame):
             self.convert.set_text("Convert Failed", color="#9e0000")
             self.run_animation.set(value=False)
             self.converting.convert_fail()
-            messagebox.showerror(title="Convert py to exe", message="Convert failed" + err)
+            messagebox.showerror(title="Convert py to exe", message="Convert failed\n" + err)
         else:
             self.convert.set_text("Successfully", color="#008f13")
             self.run_animation.set(value=False)

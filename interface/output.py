@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import filedialog
 import os
 
 
@@ -15,6 +16,9 @@ class OutFile(tk.Frame):
         self.fout = FrameOut(self)
         self.pack(fill=tk.X)
 
+    def set_trace(self, func):
+        self.fout.path.trace_variable("w", lambda v, i, m: func())
+
     def set_command(self, func):
         self.fout.button["command"] = func
 
@@ -22,7 +26,7 @@ class OutFile(tk.Frame):
         self.fout.path.set(path)
 
     def get_path(self):
-        return os.path.normcase(self.fout.entry.get())
+        return self.fout.entry.get()
 
 
 class FrameOut(tk.LabelFrame):
@@ -34,14 +38,18 @@ class FrameOut(tk.LabelFrame):
         self.entry = tk.Entry(self, textvariable=self.path, width=50, bg="#ffffff", font="Calibri 10", bd=0)
         self.default = master["bg"]
         self.button = tk.Button(self, text="Change", activebackground="#4ee5ed", width=6, font="Calibri 10",
-                                bg=self.default, bd=0)
-
+                                bg=self.default, bd=0, command=self.on_click)
         label.pack(side=tk.LEFT, padx=5, pady=5)
         self.entry.pack(side=tk.LEFT, pady=5)
         self.button.pack(side=tk.LEFT, padx=5)
         self.pack(side=tk.LEFT, padx=5, pady=10)
         self.button.bind("<Enter>", self.on_enter)
         self.button.bind("<Leave>", self.on_leave)
+
+    def on_click(self):
+        path = filedialog.askdirectory(title="Chose a folder")
+        if path:
+            self.path.set(os.path.normpath(path))
 
     def on_enter(self, _):
         self.button["bg"] = self.button["activebackground"]

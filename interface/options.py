@@ -51,7 +51,7 @@ class Options(tk.Frame):
         else:
             path = filedialog.askopenfilename(title="Select a icon file", filetypes=(("Icon file", ".ico"),))
             if path:
-                self.path.set(os.path.normcase(path))
+                self.path.set(os.path.normpath(path))
                 img = ImageTk.PhotoImage(Image.open(self.path.get()).resize((32, 32)))
                 self.option_icon.image["image"] = img
                 self.option_icon.image.image = img

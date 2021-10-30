@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import filedialog
 import os
 
 
@@ -26,7 +27,7 @@ class InFile(tk.Frame):
         self.fpath.button["command"] = func
 
     def set_trace(self, func):
-        self.fpath.path.trace_variable("w", lambda n, i, m, call=func: call())
+        self.fpath.path.trace_variable("w", lambda n, i, m: func())
 
     def set_path(self, path):
         self.fpath.path.set(path)
@@ -34,7 +35,7 @@ class InFile(tk.Frame):
             self.fname.name.set(os.path.splitext(os.path.basename(path))[0])
 
     def get_path(self):
-        return os.path.normcase(self.fpath.entry.get())
+        return self.fpath.entry.get()
 
     def get_name(self):
         return self.fname.entry.get()
@@ -61,13 +62,19 @@ class FramePath(tk.LabelFrame):
         self.entry = tk.Entry(self, textvariable=self.path, bg="#ffffff", bd=0, font="Calibri 10", width=50)
         self.default = master["bg"]
         self.button = tk.Button(self, text="Select", width=6, activebackground="#4ee5ed", bg=self.default, bd=0,
-                                font="Calibri 10")
+                                font="Calibri 10", command=self.on_click)
         label.pack(side=tk.LEFT, padx=5, pady=5)
         self.entry.pack(side=tk.LEFT, pady=5)
         self.button.pack(side=tk.LEFT, padx=5)
         self.pack(side=tk.BOTTOM, fill=tk.X)
         self.button.bind("<Enter>", self.on_enter)
         self.button.bind("<Leave>", self.on_leave)
+
+    def on_click(self):
+        path = filedialog.askopenfilename(title="Chose a python file",
+                                          filetypes=(("Python file", ".py .pyw"), ("All file", "*.*")))
+        if path:
+            self.path.set(os.path.normpath(path))
 
     def on_enter(self, _):
         self.button["bg"] = self.button["activebackground"]
