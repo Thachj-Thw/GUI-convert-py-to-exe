@@ -3,7 +3,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from modules.resource_path import path
-from modules.singleInstance import GetMutex
+from modules.single_instance import GetMutex
 from modules.subprocess_args import subprocess_args
 from interface.input import InFile
 from interface.output import OutFile
@@ -201,9 +201,8 @@ class MainFrame(tk.Frame):
         self.convert.enable()
 
     def create_command(self):
-        command = f'pyinstaller --clean --specpath "{os.path.dirname(self.path_in)}" ' \
-                  f'--distpath "{self.path_out}" --workpath "{os.path.join(path(), "build")}" ' \
-                  f'--name "{self.name_file}" '
+        command = f'pyinstaller --clean --specpath "{os.path.dirname(self.path_in)}" --distpath "{self.path_out}" ' \
+                  f'--workpath "{os.path.join(path(), "build")}" --name "{self.name_file}" '
         if self.path_icon:
             command += f'--icon="{self.path_icon}" '
         for data in self.data:
